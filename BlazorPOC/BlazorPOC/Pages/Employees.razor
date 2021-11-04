@@ -1,0 +1,54 @@
+﻿@page "/employees"
+@inject BlazorPOC.Data.IEmployeeService EmployeeService;
+
+<h1>All Users</h1>
+<br />
+
+<a href="employee/0">Add User</a>
+<table class="table">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>CountryCode</td>
+            <td>Number</td>
+            <td>EmailAddress</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in employees)
+        {
+        <tr>
+            <td>@employee.Id</td>
+            <td>@employee.Name</td>
+            <td>@employee.CountryCode</td>
+            <td>@employee.Number</td>
+            <td>@employee.EmailAddress</td>
+            <td>
+                <a href="employee/@employee.Id">
+                    Edit
+                </a>
+            </td>
+            <td>
+                <button class="btn btn-primary" @onclick="@(e=> OnDelete(employee.Id))">Delete</button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<BlazorPOC.Data.Employee> employees;
+
+    protected override void OnInitialized()
+    {
+        employees = EmployeeService.GetEmployees();
+    }
+
+    private void OnDelete(Guid id)
+    {
+        EmployeeService.DeleteEmployee(id);
+    }
+}
